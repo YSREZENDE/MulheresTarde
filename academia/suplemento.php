@@ -1,7 +1,7 @@
 <?php
    
     require_once 'head.php';
-    require 'menu.php';
+    require_once 'menu.php';
     include_once 'conexao.php';
 
     $pagatual = filter_input(INPUT_GET, "page", FILTER_SANITIZE_NUMBER_INT);

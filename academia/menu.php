@@ -54,7 +54,7 @@
                            Área do Cliente
             </button>
 
-            <img src="imagens/carrinho.png" style=width:50px;height:50px;>
+            <img src="imagens\carrinhocompra.png" style=width:50px;height:50px;>
             <?php 
               if($_SESSION["quant"]>0){
                  echo $_SESSION["quant"]; 
