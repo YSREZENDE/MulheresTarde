@@ -1,187 +1,107 @@
 <?php
-  require 'head.php';
-  require 'menu.php';
-?>  
+   
+    require_once 'head.php';
+    require_once 'menu.php';
+    include_once 'conexao.php';
 
-    <div class="container-fluid conteudo">
+    $pagatual = filter_input(INPUT_GET, "page", FILTER_SANITIZE_NUMBER_INT);
+	$pag = (!empty($pagatual)) ? $pagatual : 1;
+
+    $limitereg = 6;
+
+    $inicio = ($limitereg * $pag) - $limitereg;
+
+    $busca= "SELECT p.codigoproduto,p.nome,p.valor,p.foto
+    FROM produto p,categoria c WHERE 
+    c.idcategoria = p.idcategoria and
+    c.nomecategoria = 'mochila' and
+    p.quantidade > 0 LIMIT $inicio , $limitereg";
+
+    $resultado = $conn->prepare($busca);
+    $resultado->execute();  
+       
+       
+?>
+
+<div class="container-fluid imagens">
         <div class="row">
             <div class="col-md-12 text-center">
-               <h1>Coleção 2023</h1>
-            </div>
+            <h2>Suplementos e vitaminas</h2>
+         </div>
 
-        </div>
-    </div>
-
-   
-    <div class="container-fluid imagens">
-        <div class="row">
+        <?php
+        if (($resultado) AND ($resultado->rowCount() != 0)){
+        while ($linha = $resultado->fetch(PDO::FETCH_ASSOC)) {
+           
+            extract($linha);             
+        
+        ?>    
             <div class="col-md-3">
-                <div class="card" style="width: 18rem;">
-                    <img class="card-img-top" src="imagens/mochila1.jpg">
-                    <div class="card-body">
-                        <h3 class="card-text">Mochila Paloma</h3>
-                        <h4>R$ 150,00</h4>
-                        <!-- Botão para acionar modal -->
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#paloma">
+                <div class="card" style="width: 25rem;">
+                    <img class="card-img-top" src="<?php echo $foto; ?>">
+                    <div class="card-body text-center">
+                        <h3 class="card-text"><?php echo $nome; ?></h3>
+                        <h4>Preço R$ <?php echo $valor; ?>,00</h4>
+                       <h5>
+                        <label>Quant</label>
+                        <input type="number" name="quantcompra" value="1" style=width:45px;>
+                        </h5>
+                            <button type="button" class="btn btn-primary">
                             Comprar
                             </button>
                     </div>
                 </div> 
             </div>
+        
+    <?php         
+    } 
+}
+?>
 
-            <div class="col-md-3">
-                <div class="card" style="width: 18rem;">
-                    <img class="card-img-top" src="imagens/mochila2.jpg">
-                    <div class="card-body">
-                    <h3 class="card-text">Mochila Raissa</h3>
-                        <h4>R$ 120,00</h4>
-                        <!-- Botão para acionar modal -->
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#raissa">
-                            Comprar
-                            </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-3">
-                <div class="card" style="width: 18rem;">
-                    <img class="card-img-top" src="imagens/mochila3.jpg">
-                    <div class="card-body">
-                    <h3 class="card-text">Mochila Mayra</h3>
-                        <h4>R$ 110,00</h4>
-                        <!-- Botão para acionar modal -->
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#mayra">
-                            Comprar
-                            </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-3">
-                <div class="card" style="width: 18rem;">
-                    <img class="card-img-top" src="imagens/mochila4.jpg">
-                    <div class="card-body">
-                    <h3 class="card-text">Mochila Academia</h3>
-                        <h4>R$ 80,00</h4>
-                        <!-- Botão para acionar modal -->
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#academia">
-                            Comprar
-                            </button>
-                    </div>
-                </div>
-
-        </div>
-    </div>
-
-   
-    
-
-<!-- Modal -->
-<div class="modal fade" id="paloma" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Mochila Paloma</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-     
-            <img class="img-fluid" src="imagens/mochila1.jpg">
-            <p>Mochila em couro legitimo, com costuras reforçadas e alças anatômicas.
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-        <button type="button" class="btn btn-primary">Adicionar ao Carrinho</button>
-      </div>
-    </div>
-  </div>
+</div>
 </div>
 
+<?php
+     //Contar os registros no banco
+     $qtregistro = "SELECT COUNT(codigoproduto) AS registros FROM produto";
+     $resultado = $conn->prepare($qtregistro);
+     $resultado->execute();
+     $resposta = $resultado->fetch(PDO::FETCH_ASSOC);
 
-<!-- Modal -->
-<div class="modal fade" id="raissa" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Mochila Paloma</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-     
-            <img class="img-fluid" src="imagens/mochila1.jpg">
-            <p>Mochila em couro legitimo, com costuras reforçadas e alças anatômicas.
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-        <button type="button" class="btn btn-primary">Adicionar ao Carrinho</button>
-      </div>
-    </div>
-  </div>
-</div>
+     //Quantidade de página que serão usadas - quantidade de registros
+     //dividido pela quantidade de registro por página
+     $qnt_pagina = ceil($resposta['registros'] / $limitereg);
 
+      // Maximo de links      
+      $maximo = 2;
 
-<!-- Modal -->
-<div class="modal fade" id="academia" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Mochila Paloma</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-     
-            <img class="img-fluid" src="imagens/mochila1.jpg">
-            <p>Mochila em couro legitimo, com costuras reforçadas e alças anatômicas.
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-        <button type="button" class="btn btn-primary">Adicionar ao Carrinho</button>
-      </div>
-    </div>
-  </div>
-</div>
+      echo "<a href='relprodutos.php?page=1'>Primeira</a> ";
+    // Chamar página anterior verificando a quantidade de páginas menos 1 e 
+    // também verificando se já não é primeira página
+    for ($anterior = $pag - $maximo; $anterior <= $pag - 1; $anterior++) {
+        if ($anterior >= 1) {
+            echo "  <a href='relprodutos.php?page=$anterior'>$anterior</a> ";
+        }
+    }
+
+    //Mostrar a página ativa
+    echo "$pag";
+
+    //Chamar próxima página, ou seja, verificando a página ativa e acrescentando 1
+    // a ela
+    for ($proxima = $pag + 1; $proxima <= $pag + $maximo; $proxima++) {
+        if ($proxima <= $qnt_pagina) {
+            echo "<a href='relprodutos.php?page=$proxima'>$proxima</a> ";
+        }
+    }
+
+    echo "<a href='relprodutos.php?page=$qnt_pagina'>Última</a> ";
 
 
-<!-- Modal -->
-<div class="modal fade" id="mayra" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Mochila Paloma</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-     
-            <img class="img-fluid" src="imagens/mochila1.jpg">
-            <p>Mochila em couro legitimo, com costuras reforçadas e alças anatômicas.
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-        <button type="button" class="btn btn-primary">Adicionar ao Carrinho</button>
-      </div>
-    </div>
-  </div>
-</div>
+?>
 
-
-
-
-    <?php
+<?php
         require_once 'footer.php';
 
     ?>
  
-
-
-
-
-
-   

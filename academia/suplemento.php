@@ -41,14 +41,17 @@
                     <img class="card-img-top" src="<?php echo $foto; ?>">
                     <div class="card-body text-center">
                         <h3 class="card-text"><?php echo $nome; ?></h3>
+                         <!--jogar coisas so post para o carrinho-->
+                       <form action="carrinho.php" method="post">
                         <h4>Preço R$ <?php echo $valor; ?>,00</h4>
                        <h5>
                         <label>Quant</label>
+                              <!--jogar coisas para o carrinho-->
                         <input type="number" name="quantcompra" value="1" style=width:45px;>
                         </h5>
-                            <button type="button" class="btn btn-primary">
-                            Comprar
-                            </button>
+                        <input type="hidden" name="codigoproduto"  value="<?php echo $codigoproduto; ?>">
+                        <input type="submit" name="btn btn-primary"  value="comprar">
+        </form>
                     </div>
                 </div> 
             </div>

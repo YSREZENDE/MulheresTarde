@@ -1,5 +1,7 @@
 <?php
-
+   session_start();
+   ob_start();
+   
     if(!isset($_SESSION["quant"])){
       $_SESSION["quant"] = 0;
     }
@@ -43,9 +45,7 @@
                 
               </div>
             </li>
-            <li class="nav-item">
-              <a class="nav-link disabled" href="#">Desativado</a>
-            </li>
+          
           </ul>
           <form class="form-inline my-2 my-lg-0">
             
@@ -53,8 +53,8 @@
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#login">
                            Área do Cliente
             </button>
-
-            <img src="imagens\carrinhocompra.png" style=width:50px;height:50px;>
+<a href="frmcarrinho.php">
+            <img src="imagens\carrinhocompra.png" style=width:50px;height:50px;> </a>
             <?php 
               if($_SESSION["quant"]>0){
                  echo $_SESSION["quant"]; 

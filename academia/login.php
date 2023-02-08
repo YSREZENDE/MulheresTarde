@@ -1,8 +1,10 @@
 <?php
+require_once 'menu.php';
+require_once 'head.php';
         include_once 'conexao.php';
 
-        session_start();
-	    ob_start();
+        ob_start();
+        
 ?>
 
 <?php
@@ -75,3 +77,11 @@ if(isset($_SESSION['msg'])){
                             </div>
                             
                         </form>
+
+
+
+                        <?php
+        require_once 'footer.php';
+
+    ?>
+ 
